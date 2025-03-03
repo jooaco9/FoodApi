@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 from docs import tags_metadata
 from food_data import FoodData
 
@@ -29,14 +29,22 @@ app = FastAPI(
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/ingredientes", tags=["ingredientes"])
+@app.get("/ingredientes", tags=["ingredientes"], status_code=status.HTTP_200_OK)
 async def read_ingredients():
     # await pedir datos
     return await food.get_ingredientes()
 
-@app.get("/ingredientes/{ingrediente_id}",tags=["ingredientes"])
-async def read_ingredient(ingrediente_id: int):
+# Como default ponemos status 200
+@app.get("/ingredientes/{ingrediente_id}",tags=["ingredientes"], status_code=status.HTTP_200_OK)
+async def read_ingredient(ingrediente_id: int, response: Response):
     # await pedir datos
-    return await food.get_ingrediente(ingrediente_id)
+    ingrediente = await food.get_ingrediente(ingrediente_id)
+    if ingrediente:
+        return  ingrediente
+    else:
+        # Si no esta el ingrediente 404
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"error": str(ingrediente_id) + " no encontrado"}
+
 
 

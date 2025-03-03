@@ -17,7 +17,9 @@ class FoodData:
 
     # Devolucion asincrona de un alimento
     async def get_ingrediente(self, ingrediente_id: int):
-        alimento = {"error": str(ingrediente_id)+" no encontrado"}
+        # ingrediente_id: int, hace la conversion a entero, que tambien se hace en el endpoint,
+        # ya que en la url se pasa como string
+        alimento = None
 
         # Recorremos todos los datos JSON
         for item in self.alimentos["alimentos"]:
