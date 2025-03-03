@@ -13,11 +13,11 @@ class FoodData:
 
     # Devolucion asincrona de datos de alimentos
     async def get_ingredientes(self):
-        return self.alimentos
+        return self.alimentos["alimentos"]
 
     # Devolucion asincrona de un alimento
     async def get_ingrediente(self, ingrediente_id: int):
-        alimento = {"error", str(ingrediente_id)+" no encontrado"}
+        alimento = {"error": str(ingrediente_id)+" no encontrado"}
 
         # Recorremos todos los datos JSON
         for item in self.alimentos["alimentos"]:

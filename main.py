@@ -1,12 +1,9 @@
 from fastapi import FastAPI
+from docs import tags_metadata
+from food_data import FoodData
 
-# tag para poder agregar conjuntos en la documentacion
-tags_metadata = [
-    {
-        "name": "ingredientes",
-        "description": "Opercaiones relacionadas con el CRUD de ingredientes"
-    }
-]
+# Objeto para trabajar con los datos de prueba
+food = FoodData()
 
 # Objeto app de tipo FastApi
 app = FastAPI(
@@ -33,6 +30,13 @@ def read_root():
     return {"Hello": "World"}
 
 @app.get("/ingredientes", tags=["ingredientes"])
-def read_ingredients():
-    return {"Objeto": "Ingredientes"}
+async def read_ingredients():
+    # await pedir datos
+    return await food.get_ingredientes()
+
+@app.get("/ingredientes/{ingrediente_id}",tags=["ingredientes"])
+async def read_ingredient(ingrediente_id: int):
+    # await pedir datos
+    return await food.get_ingrediente(ingrediente_id)
+
 
