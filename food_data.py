@@ -4,25 +4,28 @@ import  json
 class FoodData:
 
     # Propiedad que almacenara todos los alimentos
-    alimentos = []
+    food = []
 
     def __init__(self):
         # Cargar del fichero de datos de prueba
         file = open("datos/alimentos.json")
-        self.alimentos = json.load(file)
+        self.food = json.load(file)
 
     # Devolucion asincrona de datos de alimentos
-    async def get_ingredientes(self):
-        return self.alimentos["alimentos"]
+    async def get_ingredients(self, skip, total):
+        return {'alimentos': self.food['alimentos'][skip:(total+skip)]}
+
+    async def get_all_ingredients(self):
+        return self.food["alimentos"]
 
     # Devolucion asincrona de un alimento
-    async def get_ingrediente(self, ingrediente_id: int):
+    async def get_ingredient(self, ingrediente_id: int):
         # ingrediente_id: int, hace la conversion a entero, que tambien se hace en el endpoint,
         # ya que en la url se pasa como string
         alimento = None
 
         # Recorremos todos los datos JSON
-        for item in self.alimentos["alimentos"]:
+        for item in self.food["alimentos"]:
             if item["id"] == ingrediente_id:
                 alimento = item
                 break

@@ -30,15 +30,23 @@ def read_root():
     return {"Hello": "World"}
 
 @app.get("/ingredientes", tags=["ingredientes"], status_code=status.HTTP_200_OK)
-async def read_ingredients():
+async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | None = None):
+    # los query parameters se ponen directamente en la funcion que se llama para el endpoint definido
+    # skipt y int se ponen en la url, /ingredientes/?skip=x&total=y, se pueden no poner o poner solo uno de los dos tambien
+
+    # para definir query parameters opcionales se pone | None = None y si quiero poner uno obligatorio saco el valor
+    # por defecto y se pone al principio
     # await pedir datos
-    return await food.get_ingredientes()
+    if not all_ingredients:
+        return await food.get_ingredients(skip, total)
+    else:
+        return await food.get_all_ingredients()
 
 # Como default ponemos status 200
 @app.get("/ingredientes/{ingrediente_id}",tags=["ingredientes"], status_code=status.HTTP_200_OK)
 async def read_ingredient(ingrediente_id: int, response: Response):
     # await pedir datos
-    ingrediente = await food.get_ingrediente(ingrediente_id)
+    ingrediente = await food.get_ingredient(ingrediente_id)
     if ingrediente:
         return  ingrediente
     else:
