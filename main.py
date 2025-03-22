@@ -93,8 +93,15 @@ async def write_ingredients(ingredient: Ingredient):
 
 
 @app.put("/ingredientes/{ingredient_id}", tags=["ingredientes"])
-async def update_ingredients(ingredient_id: int, ingredient: Ingredient):
+async def update_ingredient(ingredient_id: int, ingredient: Ingredient):
     return await food.update_ingredient(ingredient_id, ingredient)
 
+
+# Endpoints de tipo DELETE
+
+
+@app.delete("/ingredientes/{ingredient_id}", tags=["ingredientes"])
+async def delete_ingredient(ingredient_id: int):
+    return await food.delete_ingredient(ingredient_id)
 
 
