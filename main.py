@@ -89,4 +89,12 @@ async def write_ingredients(ingredient: Ingredient):
     return await food.write_ingredient(ingredient)
 
 
+# Endopints de tipo PUT
+
+
+@app.put("/ingredientes/{ingredient_id}", tags=["ingredientes"])
+async def update_ingredients(ingredient_id: int, ingredient: Ingredient):
+    return await food.update_ingredient(ingredient_id, ingredient)
+
+
 
