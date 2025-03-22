@@ -1,6 +1,7 @@
-from fastapi import FastAPI, Response, status, Path
+from fastapi import FastAPI, Response, status
 from docs import tags_metadata
 from food_data import FoodData
+from models import Ingredient
 
 # Objeto para trabajar con los datos de prueba
 food = FoodData()
@@ -24,7 +25,9 @@ app = FastAPI(
 
 # Configuracion del ApiRestFul
 
-# Endopoint GET /
+# Endopoints de tipo GET
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -77,6 +80,13 @@ async def read_plate_ingredient( response: Response, plate_id: int, ingredient_i
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"error": "plato " + str(plate_id) + ", "+"ingrediente " + str(ingredient_id) + " no encontrado"}
+
+# Endpoints de tipo POST
+
+
+@app.post("/ingredientes", tags=["ingredientes"])
+async def write_ingredients(ingredient: Ingredient):
+    return await food.write_ingredient(ingredient)
 
 
 
