@@ -19,6 +19,18 @@ class FoodData:
         file_plates = open('datos/platos.json')
         self.plates = json.load(file_plates)
 
+    # Operacion para buscar ingrediente
+    def search_ingredit(self, ingredient_id: int):
+        ingredient = None
+        ingredient_pos = 0
+        for food in self.food["alimentos"]:
+            if food["id"] == ingredient_id:
+                ingredient = food
+                break
+            ingredient_pos += 1
+
+        return ingredient_pos, ingredient
+
 # INGREDIENTES
     # Devolucion asincrona de datos de alimentos
     async def get_ingredients(self, skip, total):
@@ -59,14 +71,16 @@ class FoodData:
     # Operacion para actualizar un ingrediente
     async def update_ingredient(self, ingredient_id: int, ingredient: Ingredient):
 
+        # ingredient_update = None
+        # ingredient_pos = 0
+        # for food in self.food["alimentos"]:
+        #     if food["id"] == ingredient_id:
+        #         ingredient_update = food
+        #         break
+        #     ingredient_pos += 1
+
         # Busco el ingrediente para actualizarlo
-        ingredient_update = None
-        ingredient_pos = 0
-        for food in self.food["alimentos"]:
-            if food["id"] == ingredient_id:
-                ingredient_update = food
-                break
-            ingredient_pos += 1
+        ingredient_pos, ingredient_update = self.search_ingredit(ingredient_id)
 
         # Si existe el ingrediente lo actualizo
         if ingredient_update:
@@ -85,6 +99,22 @@ class FoodData:
             return self.food["alimentos"][ingredient_pos]
         else:
             return  None
+
+    # Operacion para borrar un ingrediente
+    async def delete_ingredient(self, ingredient_id: int):
+
+        # Busco ingrediente para elminarlo
+        ingredient_pos, ingredient_delete = self.search_ingredit(ingredient_id)
+
+        if ingredient_delete:
+            # Borro ingrediente de la lista
+            del self.food["alimentos"][ingredient_pos]
+            with open("datos/alimentos.json", "w", encoding="utf-8") as file_food:
+                json.dump(self.food, file_food, indent=2)
+
+            return {"status": f"Ingrediente {ingredient_delete['nombre']} borrado correctamente"}
+        else:
+            return {"status": "Ingrediente no encontrado"}
 
 
 # PLATOS
