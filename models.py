@@ -6,5 +6,5 @@ class Ingredient(BaseModel):
     calorias: int | None = None # Opcional
     carbohidratos: float | None = None # Opcional
     proteinas: float | None = None # Opcional
+    fibra: float | None = None  # Opcional
     grasas: float | None = None # Opcional
-    fibra: float | None = None # Opcional
