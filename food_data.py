@@ -49,12 +49,42 @@ class FoodData:
         # Incremento el id para el ingrediente nuevo
         ingredient_dict = ingredient.model_dump()
         ingredient_dict['id'] = last_food_id + 1
-        self.food["alimentos"].append(ingredient_dict)\
+        self.food["alimentos"].append(ingredient_dict)
 
         # Escribo en el json el nuevo ingrediente
         with open("datos/alimentos.json", "w", encoding="utf-8") as file_food:
             json.dump(self.food, file_food, indent=2)
         return ingredient_dict
+
+    # Operacion para actualizar un ingrediente
+    async def update_ingredient(self, ingredient_id: int, ingredient: Ingredient):
+
+        # Busco el ingrediente para actualizarlo
+        ingredient_update = None
+        ingredient_pos = 0
+        for food in self.food["alimentos"]:
+            if food["id"] == ingredient_id:
+                ingredient_update = food
+                break
+            ingredient_pos += 1
+
+        # Si existe el ingrediente lo actualizo
+        if ingredient_update:
+            # Pasamos el modelo a un diccionario
+            ingredient_dict = ingredient.model_dump()
+
+            # Recorro cada clave del diccionario
+            for elem in ingredient_dict:
+                # Si existe valor con la clave, lo actualizo
+                if ingredient_dict[elem] is not None:
+                    self.food["alimentos"][ingredient_pos][elem] = ingredient_dict[elem]
+
+            # Rescribo el json con el ingrediente actualizdo
+            with open("datos/alimentos.json", "w", encoding="utf-8") as file_food:
+                json.dump(self.food, file_food, indent=2)
+            return self.food["alimentos"][ingredient_pos]
+        else:
+            return  None
 
 
 # PLATOS
