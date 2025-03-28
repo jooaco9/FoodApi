@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response, status
 from docs import tags_metadata
 from food_data import FoodData
-from models import Ingredient
+from models import Ingredient, Plate
 
 # Objeto para trabajar con los datos de prueba
 food = FoodData()
@@ -25,13 +25,12 @@ app = FastAPI(
 
 # Configuracion del ApiRestFul
 
-# Endopoints de tipo GET
-
-
+# Endopoints de tipo GET, para ingredientes
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
+# Devuleve todos los ingredientes
 @app.get("/ingredientes", tags=["ingredientes"], status_code=status.HTTP_200_OK)
 async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | None = None):
     # los query parameters se ponen directamente en la funcion que se llama para el endpoint definido
@@ -45,6 +44,7 @@ async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | N
     else:
         return await food.get_all_ingredients()
 
+# Devuelve un ingredinte segun id
 # Como default ponemos status 200
 @app.get("/ingredientes/{ingredient_id}",tags=["ingredientes"], status_code=status.HTTP_200_OK)
 async def read_ingredient(ingredient_id: int, response: Response):
@@ -57,6 +57,32 @@ async def read_ingredient(ingredient_id: int, response: Response):
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"error": str(ingredient_id) + " no encontrado"}
 
+# Endpoints de tipo POST, para ingredientes
+
+# Agregar un ignrediente
+@app.post("/ingredientes", tags=["ingredientes"])
+async def write_ingredients(ingredient: Ingredient):
+    return await food.write_ingredient(ingredient)
+
+
+# Endopints de tipo PUT, para ingredientes
+
+# Modificar un ingrediente
+@app.put("/ingredientes/{ingredient_id}", tags=["ingredientes"])
+async def update_ingredient(ingredient_id: int, ingredient: Ingredient):
+    return await food.update_ingredient(ingredient_id, ingredient)
+
+
+# Endpoints de tipo DELETE, para ingredientes
+
+# Borrar un ingrediente
+@app.delete("/ingredientes/{ingredient_id}", tags=["ingredientes"])
+async def delete_ingredient(ingredient_id: int):
+    return await food.delete_ingredient(ingredient_id)
+
+# Endopoints de tipo GET, para platos
+
+# Devulve el plato segun el id
 @app.get("/platos/{plate_id}",tags=["platos"], status_code=status.HTTP_200_OK)
 async def read_plate(plate_id: int, response: Response):
     # Buscamos el plato
@@ -69,6 +95,7 @@ async def read_plate(plate_id: int, response: Response):
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"error": str(plate_id) + " no encontrado"}
 
+# Devuelvo ingrediente de un plato, segun sus ids
 @app.get("/platos/{plate_id}/ingredientes/{ingredient_id}",tags=["platos"], status_code=status.HTTP_200_OK)
 async def read_plate_ingredient( response: Response, plate_id: int, ingredient_id: int):
     # Buscamos el plato
@@ -81,27 +108,9 @@ async def read_plate_ingredient( response: Response, plate_id: int, ingredient_i
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"error": "plato " + str(plate_id) + ", "+"ingrediente " + str(ingredient_id) + " no encontrado"}
 
-# Endpoints de tipo POST
+# Endopoints de tipo POST, para platos
 
-
-@app.post("/ingredientes", tags=["ingredientes"])
-async def write_ingredients(ingredient: Ingredient):
-    return await food.write_ingredient(ingredient)
-
-
-# Endopints de tipo PUT
-
-
-@app.put("/ingredientes/{ingredient_id}", tags=["ingredientes"])
-async def update_ingredient(ingredient_id: int, ingredient: Ingredient):
-    return await food.update_ingredient(ingredient_id, ingredient)
-
-
-# Endpoints de tipo DELETE
-
-
-@app.delete("/ingredientes/{ingredient_id}", tags=["ingredientes"])
-async def delete_ingredient(ingredient_id: int):
-    return await food.delete_ingredient(ingredient_id)
-
-
+# Agregar un plato
+@app.post("/platos", tags=["platos"])
+async def write_plates(plate: Plate):
+    return await food.write_plate(plate)

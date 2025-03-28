@@ -1,6 +1,6 @@
 import  json
 
-from models import Ingredient
+from models import Ingredient, Plate
 
 
 # Clase que nos permite trabajar con los datos de prueba
@@ -146,3 +146,19 @@ class FoodData:
                     ingredient = await self.get_ingredient(ingredient_id)
                     break
         return ingredient
+
+    async def write_plate(self, plate: Plate):
+        # Tomo el ultimo id
+        last_plate_id = self.plates["platos"][-1]["id"]
+        plate_dict = plate.model_dump()
+        plate_dict["id"] = last_plate_id + 1
+
+        # Agrego nuevo plato a la lista
+        self.plates["platos"].append(plate_dict)
+
+        # Ahora lo escribo en el json
+        with open("datos/platos.json", "w", encoding="utf-8") as plate_file:
+            json.dump(self.plates, plate_file, indent=2)
+
+        return plate_dict
+
