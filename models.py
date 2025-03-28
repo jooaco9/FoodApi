@@ -8,3 +8,15 @@ class Ingredient(BaseModel):
     proteinas: float | None = None # Opcional
     fibra: float | None = None  # Opcional
     grasas: float | None = None # Opcional
+
+# Modelo para los ingredientes guardados en cada plato
+class IngredientPlate(BaseModel):
+    id: int
+    cant: int
+    ud: str
+
+# Modelo Plato
+class Plate(BaseModel):
+    nombre: str
+    tipo: str
+    ingredientes: list[IngredientPlate]
