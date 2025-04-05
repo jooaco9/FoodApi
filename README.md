@@ -2,6 +2,8 @@
 
 ApiRestFul para la gestión de alimentos y planes nutricionales desarrollada con FastAPI y Python.
 
+> **Nota**: Este es un proyecto en progreso y actualmente no está terminado. Se están desarrollando nuevas características y mejoras.
+
 ## Descripción
 
 FoodApi es un proyecto de API REST desarrollado con fines de aprendizaje. Proporciona endpoints para gestionar ingredientes y platos, implementando operaciones CRUD (Crear, Leer, Actualizar, Eliminar) a través de métodos HTTP (GET, POST, PUT, DELETE).
@@ -66,6 +68,10 @@ Una vez que el servidor esté en funcionamiento, puedes acceder a la documentaci
 - `food_data.py` - Clase de gestión de datos para ingredientes y platos
 - `docs.py` - Configuración de la documentación de la API
 - `datos/` - Directorio que contiene archivos JSON con datos de prueba
+
+## Estado del proyecto
+
+Este proyecto está en desarrollo activo. Se están implementando nuevas funcionalidades y mejorando las existentes. No se considera una versión final y pueden producirse cambios significativos.
 
 ## Licencia
 
