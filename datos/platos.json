@@ -3,7 +3,7 @@
     {
       "id": 1,
       "nombre": "Macarrones con tomate",
-      "tipo": "Principal",
+      "tipo": "principal",
       "ingredientes": [
         {
           "id": 455,
@@ -40,7 +40,7 @@
     {
       "id": 2,
       "nombre": "Arroz caldoso con pollo",
-      "tipo": "Principal",
+      "tipo": "principal",
       "ingredientes": [
         {
           "id": 60,
@@ -72,7 +72,7 @@
     {
       "id": 3,
       "nombre": "Crema calabacin",
-      "tipo": "Entrante",
+      "tipo": "entrante",
       "ingredientes": [
         {
           "id": 153,
@@ -109,7 +109,7 @@
     {
       "id": 4,
       "nombre": "Flan de huevo",
-      "tipo": "Postre",
+      "tipo": "postre",
       "ingredientes": [
         {
           "id": 387,
@@ -127,59 +127,6 @@
           "ud": "gr"
         }
       ]
-    },
-    {
-      "nombre": "string",
-      "tipo": "string",
-      "ingredientes": [
-        {
-          "id": 0,
-          "cant": 0,
-          "ud": "string"
-        }
-      ],
-      "id": 5
-    },
-    {
-      "nombre": "Plato prueba",
-      "tipo": "platito",
-      "ingredientes": [
-        {
-          "id": 45,
-          "cant": 4,
-          "ud": "gr"
-        }
-      ],
-      "id": 6
-    },
-    {
-      "nombre": "Prueba plato con ingrediente",
-      "tipo": "Postre",
-      "ingredientes": [
-        {
-          "id": 758,
-          "cant": 250,
-          "ud": "gr"
-        }
-      ],
-      "id": 7
-    },
-    {
-      "nombre": "Plato prueba",
-      "tipo": "platito",
-      "ingredientes": [
-        {
-          "id": 45,
-          "cant": 4,
-          "ud": "gr"
-        },
-        {
-          "id": 455,
-          "cant": 12,
-          "ud": "ml"
-        }
-      ],
-      "id": 8
     }
   ]
 }
