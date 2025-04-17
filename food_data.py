@@ -36,8 +36,16 @@ class FoodData:
 
 # INGREDIENTES
     # Devolucion asincrona de datos de alimentos
-    async def get_ingredients(self, skip, total):
-        return {'alimentos': self.food['alimentos'][skip:(total+skip)]}
+    async def get_ingredients(self, skip, total, name_filter):
+        foods = self.food['alimentos'][skip:(total + skip)]
+
+        # Si hay filtro, lo filtramos
+        if name_filter:
+            food_filter = [food for food in foods if name_filter in food["nombre"]]
+            return {'alimentos': food_filter}
+
+        # Si no hay filto, devolvemos con skip y total
+        return {'alimentos': foods}
 
     async def get_all_ingredients(self):
         return self.food["alimentos"]
