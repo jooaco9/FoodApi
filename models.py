@@ -1,4 +1,11 @@
 from pydantic import BaseModel
+from enum import Enum
+
+class PlateType(str, Enum):
+    incoming = "entrante"
+    main = "principal"
+    dessert = "postre"
+    drink = "bebida"
 
 # Modelo Ingrediente
 class Ingredient(BaseModel):
@@ -18,5 +25,5 @@ class IngredientPlate(BaseModel):
 # Modelo Plato
 class Plate(BaseModel):
     nombre: str
-    tipo: str
+    tipo: PlateType
     ingredientes: list[IngredientPlate]
