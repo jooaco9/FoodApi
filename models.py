@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from enum import Enum
 
+# Enum para el tipo de plato
 class PlateType(str, Enum):
     incoming = "entrante"
     main = "principal"
