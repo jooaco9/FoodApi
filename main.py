@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Response, status, Body, Query
-from typing_extensions import Annotated, Union
+from fastapi import FastAPI, Response, status, Body, Query, Path
+from typing_extensions import Annotated
 
 from docs import tags_metadata
 from food_data import FoodData
@@ -50,7 +50,7 @@ async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | N
 # Devuelve un ingredinte segun id
 # Como default ponemos status 200
 @app.get("/ingredientes/{ingredient_id}",tags=["ingredientes"], status_code=status.HTTP_200_OK)
-async def read_ingredient(ingredient_id: int, response: Response):
+async def read_ingredient(ingredient_id: Annotated[int, Path(ge=1)], response: Response):
     # await pedir datos
     ingredient = await food.get_ingredient(ingredient_id)
     if ingredient:
