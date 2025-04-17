@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, status, Body, Query, Path
+from fastapi import FastAPI, Response, status, Body, Query, Path, HTTPException
 from typing_extensions import Annotated
 
 from docs import tags_metadata
@@ -50,15 +50,14 @@ async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | N
 # Devuelve un ingredinte segun id
 # Como default ponemos status 200
 @app.get("/ingredientes/{ingredient_id}",tags=["ingredientes"], status_code=status.HTTP_200_OK)
-async def read_ingredient(ingredient_id: Annotated[int, Path(ge=1)], response: Response):
+async def read_ingredient(ingredient_id: Annotated[int, Path(ge=1)]):
     # await pedir datos
     ingredient = await food.get_ingredient(ingredient_id)
-    if ingredient:
-        return  ingredient
-    else:
-        # Si no esta el ingrediente 404
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"error": str(ingredient_id) + " no encontrado"}
+
+    if not ingredient:
+        raise HTTPException(status_code=404, detail=f"Ingrediente {str(ingredient_id)} no encontrado")
+
+    return ingredient
 
 # Endpoints de tipo POST, para ingredientes
 
@@ -75,7 +74,7 @@ async def write_ingredients_plates(ingredient: Ingredient, plate: Plate):
 
 # Modificar un ingrediente
 @app.put("/ingredientes/{ingredient_id}", tags=["ingredientes"])
-async def update_ingredient(ingredient_id: int, ingredient: Ingredient):
+async def update_ingredient(ingredient_id: Annotated[int, Path(ge=1)], ingredient: Ingredient):
     return await food.update_ingredient(ingredient_id, ingredient)
 
 
@@ -83,36 +82,34 @@ async def update_ingredient(ingredient_id: int, ingredient: Ingredient):
 
 # Borrar un ingrediente
 @app.delete("/ingredientes/{ingredient_id}", tags=["ingredientes"])
-async def delete_ingredient(ingredient_id: int):
+async def delete_ingredient(ingredient_id: Annotated[int, Path(ge=1)]):
     return await food.delete_ingredient(ingredient_id)
 
 # Endopoints de tipo GET, para platos
 
 # Devulve el plato segun el id
 @app.get("/platos/{plate_id}",tags=["platos"], status_code=status.HTTP_200_OK)
-async def read_plate(plate_id: int, response: Response):
+async def read_plate(plate_id: Annotated[int, Path(ge=1)]):
     # Buscamos el plato
     plate = await food.get_plate(plate_id)
-    #Si encontramos el ingrediente lo devolvemos
-    if plate:
-        return plate
-    #Si el ingrediente es nulo
-    else:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"error": str(plate_id) + " no encontrado"}
+
+    # Si no se encuentra el plato, devolvemos 404
+    if not plate:
+        raise HTTPException(status_code=404, detail="Plato " + str(plate_id) + " no encontrado")
+
+    return plate
 
 # Devuelvo ingrediente de un plato, segun sus ids
 @app.get("/platos/{plate_id}/ingredientes/{ingredient_id}",tags=["platos"], status_code=status.HTTP_200_OK)
-async def read_plate_ingredient( response: Response, plate_id: int, ingredient_id: int):
+async def read_plate_ingredient( response: Response, plate_id: Annotated[int, Path(ge=1)], ingredient_id: Annotated[int, Path(ge=1)]):
     # Buscamos el plato
     ingredient = await food.get_ingredient_plate(plate_id,ingredient_id)
-    #Si encontramos el ingrediente lo devolvemos
-    if ingredient:
-        return ingredient
-    #Si el ingrediente es nulo
-    else:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"error": "plato " + str(plate_id) + ", "+"ingrediente " + str(ingredient_id) + " no encontrado"}
+
+    # Si no esta el ingrediente 404
+    if not ingredient:
+        raise HTTPException(status_code=404, detail="Plato " + str(plate_id) + ", ingrediente " + str(ingredient_id) + " no encontrado")
+
+    return ingredient
 
 # Endopoints de tipo POST, para platos
 
