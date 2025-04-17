@@ -1,4 +1,6 @@
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, Body
+from typing_extensions import Annotated
+
 from docs import tags_metadata
 from food_data import FoodData
 from models import Ingredient, Plate
@@ -64,6 +66,9 @@ async def read_ingredient(ingredient_id: int, response: Response):
 async def write_ingredients(ingredient: Ingredient):
     return await food.write_ingredient(ingredient)
 
+@app.post("/ingredientes_platos", tags=["ingredientes"])
+async def write_ingredients_plates(ingredient: Ingredient, plate: Plate):
+    return await food.write_ingredient_plate(ingredient, plate)
 
 # Endopints de tipo PUT, para ingredientes
 
@@ -112,5 +117,5 @@ async def read_plate_ingredient( response: Response, plate_id: int, ingredient_i
 
 # Agregar un plato
 @app.post("/platos", tags=["platos"])
-async def write_plates(plate: Plate):
-    return await food.write_plate(plate)
+async def write_plates(plate: Plate, time_salient: Annotated[int, Body()]):
+    return await food.write_plate(plate, time_salient)
