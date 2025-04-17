@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Response, status, Body
-from typing_extensions import Annotated
+from fastapi import FastAPI, Response, status, Body, Query
+from typing_extensions import Annotated, Union
 
 from docs import tags_metadata
 from food_data import FoodData
@@ -34,7 +34,8 @@ def read_root():
 
 # Devuleve todos los ingredientes
 @app.get("/ingredientes", tags=["ingredientes"], status_code=status.HTTP_200_OK)
-async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | None = None):
+async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | None = None,
+                           name_filter: Annotated[str | None, Query(min_length=3, max_length=10)] = None):
     # los query parameters se ponen directamente en la funcion que se llama para el endpoint definido
     # skipt y int se ponen en la url, /ingredientes/?skip=x&total=y, se pueden no poner o poner solo uno de los dos tambien
 
@@ -42,7 +43,7 @@ async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | N
     # por defecto y se pone al principio
     # await pedir datos
     if not all_ingredients:
-        return await food.get_ingredients(skip, total)
+        return await food.get_ingredients(skip, total, name_filter)
     else:
         return await food.get_all_ingredients()
 
