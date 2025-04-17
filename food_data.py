@@ -9,6 +9,7 @@ class FoodData:
     # Propiedad que almacenara todos los alimentos
     food = []
     plates = []
+    salients = []
     file_food = None
 
     def __init__(self):
@@ -18,6 +19,8 @@ class FoodData:
         self.file_food.close()
         file_plates = open('datos/platos.json')
         self.plates = json.load(file_plates)
+        file_salients = open('datos/destacados.json')
+        self.salients = json.load(file_salients)
 
     # Operacion para buscar ingrediente
     def search_ingredit(self, ingredient_id: int):
@@ -116,6 +119,17 @@ class FoodData:
         else:
             return {"status": "Ingrediente no encontrado"}
 
+    async def write_ingredient_plate(self, ingredient: Ingredient, plate: Plate):
+        ingredient = await self.write_ingredient(ingredient)
+
+        # Serealizamos para añadir id
+        plate_dict = plate.model_dump()
+        plate_dict['ingredientes'][0]['id'] = ingredient['id']
+        plate_ingredient_id = plate.model_validate(plate_dict)
+        plate_dict = await self.write_plate(plate_ingredient_id)
+
+        return dict([('ingrediente', ingredient), ('plate', plate_dict)])
+
 
 # PLATOS
     # Devolucion asincrona de datos de alimentos
@@ -147,7 +161,7 @@ class FoodData:
                     break
         return ingredient
 
-    async def write_plate(self, plate: Plate):
+    async def write_plate(self, plate: Plate, time_salient: int):
         # Tomo el ultimo id
         last_plate_id = self.plates["platos"][-1]["id"]
         plate_dict = plate.model_dump()
@@ -160,5 +174,29 @@ class FoodData:
         with open("datos/platos.json", "w", encoding="utf-8") as plate_file:
             json.dump(self.plates, plate_file, indent=2)
 
-        return plate_dict
+        salient_dict = await self.write_salient(plate_dict, time_salient)
+
+        return dict([('plato', plate_dict), ('destacado', salient_dict)])
+
+# DESTACADOS
+    # Agregar un plato destacado
+    async def write_salient(self, plate: Plate, time_salient: int):
+        # Tomo el ultimo id de los destacados
+        last_salient_id = self.salients["destacados"][-1]['id']
+
+        # Plato nuevo destacados
+        plate_salient = {
+            "id": last_salient_id + 1,
+            "id_plato": plate['id'],
+            "tiempo": time_salient
+        }
+
+        self.salients["destacados"].append(plate_salient)
+
+        with open('datos/destacados.json', 'w', encoding="utf-8") as salient_file:
+            json.dump(self.salients, salient_file, indent=2)
+
+        return plate_salient
+
+
 
