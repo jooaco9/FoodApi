@@ -1,5 +1,9 @@
 from fastapi import FastAPI, Response, status, Body, Query, Path, HTTPException
 from typing_extensions import Annotated
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 from docs import tags_metadata
 from food_data import FoodData
@@ -9,6 +13,7 @@ from models import Ingredient, Plate
 food = FoodData()
 
 # Objeto app de tipo FastApi
+# Configuracion del ApiRestFul
 app = FastAPI(
     title="FoodApi",
     description="ApiRestFul para la gestion de alimentos y planes nutricionales",
@@ -25,7 +30,35 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
-# Configuracion del ApiRestFul
+# Manejo de EXCEPCIONES
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=jsonable_encoder({"error": exc.detail})
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc: RequestValidationError):
+    # Conversion dict
+    error_dict = eval(str(exc))
+
+    if error_dict[0]['type'] == "greater_than_equal":
+        code_error = 422
+    else:
+        code_error = 404
+    return JSONResponse(
+        status_code=code_error,
+        content=jsonable_encoder(
+            {
+                "error": error_dict[0]["msg"],
+                "dato_enviado": error_dict[0]['input']
+            }
+        )
+    )
+
+# Definicion de los ENDPOINTS
 
 # Endopoints de tipo GET, para ingredientes
 @app.get("/")
