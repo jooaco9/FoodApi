@@ -28,3 +28,15 @@ class Plate(BaseModel):
     nombre: str
     tipo: PlateType
     ingredientes: list[IngredientPlate]
+
+# Modelo para los usuarios
+class User(BaseModel):
+    nombre: str
+    apellidos: str
+    email: str
+    password: str
+
+class UserOut(BaseModel):
+    nombre: str
+    apellidos: str
+    email: str
