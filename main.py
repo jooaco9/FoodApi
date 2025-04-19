@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, Response, status, Body, Query, Path, HTTPException
 from typing_extensions import Annotated
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -7,7 +8,8 @@ from fastapi.encoders import jsonable_encoder
 
 from docs import tags_metadata
 from food_data import FoodData
-from models import Ingredient, Plate
+from typing import Any
+from models import Ingredient, Plate, User, UserOut
 
 # Objeto para trabajar con los datos de prueba
 food = FoodData()
@@ -150,3 +152,21 @@ async def read_plate_ingredient( response: Response, plate_id: Annotated[int, Pa
 @app.post("/platos", tags=["platos"])
 async def write_plates(plate: Plate, time_salient: Annotated[int, Body()]):
     return await food.write_plate(plate, time_salient)
+
+
+# USUARIOS
+
+# Con -> Any, hacemos que devuelva el modelo que pongo en response_model, por mas que lo que devuelve
+# write_user es un User, nosotros devolvemos el UserOut que no tiene la password
+@app.post("/usuarios", response_model=UserOut, tags=['usuarios'])
+async def write_user(usr: User) -> Any:
+    return await food.write_user(usr)
+
+
+
+
+
+
+# if __name__ == "__main__":
+#     # Esto es para usar el debug y correrlo desde pycharm y no hacer el uvicorn por fuera
+#     uvicorn.run(app, host="0.0.0.0", port=8000)
