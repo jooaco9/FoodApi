@@ -6,6 +6,10 @@ tags_metadata = [
     },
     {
         "name": "platos",
-        "description": "Operaciones relacionadas con el CRUD de platos",
+        "description": "Operaciones relacionadas con el CRUD de platos"
+    },
+    {
+        "name": "usuarios",
+        "description": "Operaciones relacionadas con el CRUD de usuarios"
     }
 ]
