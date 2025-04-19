@@ -1,6 +1,7 @@
-import  json
+import json
+import bcrypt
 
-from models import Ingredient, Plate
+from models import Ingredient, Plate, User
 
 
 # Clase que nos permite trabajar con los datos de prueba
@@ -10,6 +11,7 @@ class FoodData:
     food = []
     plates = []
     salients = []
+    users = []
     file_food = None
 
     def __init__(self):
@@ -21,6 +23,32 @@ class FoodData:
         self.plates = json.load(file_plates)
         file_salients = open('datos/destacados.json')
         self.salients = json.load(file_salients)
+        file_users = open('datos/usuarios.json')
+        self.users = json.load(file_users)
+
+
+# USUARIOS
+
+    async def write_user(self, usr: User):
+
+        # Tomo el ultimo id
+        last_user_id = self.users['usuarios'][-1]['id']
+        user_dict = usr.model_dump()
+        user_dict['id'] = last_user_id + 1
+
+        # Hash del password
+        salt = bcrypt.gensalt()
+        user_dict["password"] = bcrypt.hashpw(user_dict["password"].encode('utf-8'), salt).decode('utf-8')
+
+        # Agregamos el usuario a la lista
+        self.users["usuarios"].append(user_dict)
+        with open("datos/usuarios.json", "w", encoding="utf-8") as file_users:
+            json.dump(self.users, file_users, indent=2)
+
+        return user_dict
+
+
+# INGREDIENTES
 
     # Operacion para buscar ingrediente
     def search_ingredit(self, ingredient_id: int):
@@ -34,7 +62,6 @@ class FoodData:
 
         return ingredient_pos, ingredient
 
-# INGREDIENTES
     # Devolucion asincrona de datos de alimentos
     async def get_ingredients(self, skip, total, name_filter):
         foods = self.food['alimentos'][skip:(total + skip)]
