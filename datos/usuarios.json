@@ -1,0 +1,25 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "nombre",
+      "apellidos": "apellidos",
+      "email": "email",
+      "password": "password"
+    },
+    {
+      "nombre": "Joaquin",
+      "apellidos": "Corbo Pereira",
+      "email": "joaquin.corbo9@gmail.com",
+      "password": "$2b$12$KpiVxBOSuc8CwJ8GtCUGL.6FtfDbU0vjtjgJnIYTadHMA.X2W0UoC",
+      "id": 2
+    },
+    {
+      "nombre": "Joaquin",
+      "apellidos": "Corbo Pereira",
+      "email": "joaquin.corbo9@gmail.com",
+      "password": "$2b$12$9zCsOH4WF/Ag8EtPGLKKd.Xurnjzhldp12vcC92yObgdfReVBS1Vm",
+      "id": 3
+    }
+  ]
+}
