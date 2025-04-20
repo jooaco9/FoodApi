@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI, Response, status, Body, Query, Path, HTTPException
+from fastapi import FastAPI, Response, status, Body, Query, Path, HTTPException, BackgroundTasks
 from typing_extensions import Annotated
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exceptions import RequestValidationError
@@ -155,11 +155,17 @@ async def write_plates(plate: Plate, time_salient: Annotated[int, Body()]):
 
 
 # USUARIOS
+def send_fake_email(email: str, message=""):
+    with open("log.txt", mode="w") as email_file:
+        content = f"notification for {email}: {message}"
+        email_file.write(content)
 
 # Con -> Any, hacemos que devuelva el modelo que pongo en response_model, por mas que lo que devuelve
 # write_user es un User, nosotros devolvemos el UserOut que no tiene la password
 @app.post("/usuarios", response_model=UserOut, tags=['usuarios'])
-async def write_user(usr: User) -> Any:
+async def write_user(usr: User, background_tasks: BackgroundTasks) -> Any:
+    # La background task no influye en la respuesta, se hace cuando puede, se ejecuta en el background
+    background_tasks.add_task(send_fake_email, usr.email, message="Nuestro primer correo fake")
     return await food.write_user(usr)
 
 
