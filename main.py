@@ -69,8 +69,18 @@ def read_root():
 
 # Devuleve todos los ingredientes
 @app.get("/ingredientes", tags=["ingredientes"], status_code=status.HTTP_200_OK)
-async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | None = None,
-                           name_filter: Annotated[str | None, Query(min_length=3, max_length=10)] = None):
+async def read_ingredients(skip: Annotated[int,
+                                 Query(description="Cantidad de ingredientes a saltar")] = 0,
+                           total: Annotated[int,
+                                  Query(description="Total de ingredientes a devolver")] = 10,
+                           all_ingredients: Annotated[bool | None,
+                                            Query(description="Se muestran todos los ingredientes")] = None,
+                           name_filter: Annotated[str | None,
+                                        Query(
+                                            description="Filtro de busqueda",
+                                            min_length=3,
+                                            max_length=10
+                                        )] = None):
     # los query parameters se ponen directamente en la funcion que se llama para el endpoint definido
     # skipt y int se ponen en la url, /ingredientes/?skip=x&total=y, se pueden no poner o poner solo uno de los dos tambien
 
@@ -84,8 +94,11 @@ async def read_ingredients(skip: int=0, total: int=10, all_ingredients: bool | N
 
 # Devuelve un ingredinte segun id
 # Como default ponemos status 200
-@app.get("/ingredientes/{ingredient_id}",tags=["ingredientes"], status_code=status.HTTP_200_OK)
-async def read_ingredient(ingredient_id: Annotated[int, Path(ge=1)]):
+@app.get("/ingredientes/{ingredient_id}",tags=["ingredientes"], status_code=status.HTTP_200_OK,
+         summary="Buscar Ingrediente",
+         description="Buscar ingrediente a traves del ingredient_id"
+         )
+async def read_ingredient(ingredient_id: Annotated[int, Path(description="Id entero de busqueda" ,ge=1)]):
     # await pedir datos
     ingredient = await food.get_ingredient(ingredient_id)
 

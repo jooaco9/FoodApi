@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from enum import Enum
 
 # Enum para el tipo de plato
@@ -11,7 +11,7 @@ class PlateType(str, Enum):
 # Modelo Ingrediente
 class Ingredient(BaseModel):
     nombre: str
-    calorias: int | None = None # Opcional
+    calorias: int | None = Field(default=None, gt=0, description="Calorias del ingrediente. Entero mayor que 0") # Opcional
     carbohidratos: float | None = None # Opcional
     proteinas: float | None = None # Opcional
     fibra: float | None = None  # Opcional
@@ -25,7 +25,7 @@ class IngredientPlate(BaseModel):
 
 # Modelo Plato
 class Plate(BaseModel):
-    nombre: str
+    nombre: str = Field(description="Nombre del plato", max_length=128) # Con Field agregamos documentacion
     tipo: PlateType
     ingredientes: list[IngredientPlate]
 
