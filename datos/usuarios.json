@@ -20,6 +20,13 @@
       "email": "joaquin.corbo9@gmail.com",
       "password": "$2b$12$9zCsOH4WF/Ag8EtPGLKKd.Xurnjzhldp12vcC92yObgdfReVBS1Vm",
       "id": 3
+    },
+    {
+      "nombre": "Joaquin",
+      "apellidos": "Corbo Pereira",
+      "email": "jokin5249149@gmail.com",
+      "password": "$2b$12$6kfcVr1bapyvhSazddFDz.PmwjFYtaiWOCRI4IOYyaIlcfDvdxj46",
+      "id": 4
     }
   ]
 }
