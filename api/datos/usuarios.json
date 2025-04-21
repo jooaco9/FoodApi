@@ -27,6 +27,20 @@
       "email": "jokin5249149@gmail.com",
       "password": "$2b$12$6kfcVr1bapyvhSazddFDz.PmwjFYtaiWOCRI4IOYyaIlcfDvdxj46",
       "id": 4
+    },
+    {
+      "nombre": "Joaquin",
+      "apellidos": "Corbo Pereira",
+      "email": "jokin5249149@gmail.com",
+      "password": "$2b$12$Ti2OzVSR0onuOzTwCc5Vkui0oKYt8KJ.GBhJgVs3726hg/R76LznO",
+      "id": 5
+    },
+    {
+      "nombre": "Romina",
+      "apellidos": "Busiello",
+      "email": "rominabusiello29@gmail.com",
+      "password": "$2b$12$PfNGQOLx5fpr1nJKFeaj9u7cmqCFJ8VTjdG4j0GB/kVNM5kvjbu5O",
+      "id": 6
     }
   ]
 }

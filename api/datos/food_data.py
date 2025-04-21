@@ -1,29 +1,31 @@
 import json
 import bcrypt
+import os
 
-from models import Ingredient, Plate, User
+from api.utilidades.models import Ingredient, Plate, User
 
 
 # Clase que nos permite trabajar con los datos de prueba
 class FoodData:
 
-    # Propiedad que almacenara todos los alimentos
+    # Propiedad que almacenara todos los datos
     food = []
     plates = []
     salients = []
     users = []
-    file_food = None
+    work_dir = None
 
     def __init__(self):
+        self.work_dir = os.getcwd()
+        self.work_dir = self.work_dir + "\\api\\datos\\"
         # Cargar del fichero de datos de prueba
-        self.file_food = open("datos/alimentos.json")
-        self.food = json.load(self.file_food)
-        self.file_food.close()
-        file_plates = open('datos/platos.json')
+        file_food = open(self.work_dir +"alimentos.json")
+        self.food = json.load(file_food)
+        file_plates = open(self.work_dir +'platos.json')
         self.plates = json.load(file_plates)
-        file_salients = open('datos/destacados.json')
+        file_salients = open(self.work_dir +'destacados.json')
         self.salients = json.load(file_salients)
-        file_users = open('datos/usuarios.json')
+        file_users = open(self.work_dir +'usuarios.json')
         self.users = json.load(file_users)
 
 
@@ -42,7 +44,7 @@ class FoodData:
 
         # Agregamos el usuario a la lista
         self.users["usuarios"].append(user_dict)
-        with open("datos/usuarios.json", "w", encoding="utf-8") as file_users:
+        with open(self.work_dir + "usuarios.json", "w", encoding="utf-8") as file_users:
             json.dump(self.users, file_users, indent=2)
 
         return user_dict
@@ -102,7 +104,7 @@ class FoodData:
         self.food["alimentos"].append(ingredient_dict)
 
         # Escribo en el json el nuevo ingrediente
-        with open("datos/alimentos.json", "w", encoding="utf-8") as file_food:
+        with open(self.work_dir + "alimentos.json", "w", encoding="utf-8") as file_food:
             json.dump(self.food, file_food, indent=2)
         return ingredient_dict
 
@@ -132,7 +134,7 @@ class FoodData:
                     self.food["alimentos"][ingredient_pos][elem] = ingredient_dict[elem]
 
             # Rescribo el json con el ingrediente actualizdo
-            with open("datos/alimentos.json", "w", encoding="utf-8") as file_food:
+            with open(self.work_dir + "alimentos.json", "w", encoding="utf-8") as file_food:
                 json.dump(self.food, file_food, indent=2)
             return self.food["alimentos"][ingredient_pos]
         else:
@@ -147,7 +149,7 @@ class FoodData:
         if ingredient_delete:
             # Borro ingrediente de la lista
             del self.food["alimentos"][ingredient_pos]
-            with open("datos/alimentos.json", "w", encoding="utf-8") as file_food:
+            with open(self.work_dir + "alimentos.json", "w", encoding="utf-8") as file_food:
                 json.dump(self.food, file_food, indent=2)
 
             return {"status": f"Ingrediente {ingredient_delete['nombre']} borrado correctamente"}
@@ -206,7 +208,7 @@ class FoodData:
         self.plates["platos"].append(plate_dict)
 
         # Ahora lo escribo en el json
-        with open("datos/platos.json", "w", encoding="utf-8") as plate_file:
+        with open(self.work_dir + "platos.json", "w", encoding="utf-8") as plate_file:
             json.dump(self.plates, plate_file, indent=2)
 
         salient_dict = await self.write_salient(plate_dict, time_salient)
@@ -228,7 +230,7 @@ class FoodData:
 
         self.salients["destacados"].append(plate_salient)
 
-        with open('datos/destacados.json', 'w', encoding="utf-8") as salient_file:
+        with open(self.work_dir + 'destacados.json', 'w', encoding="utf-8") as salient_file:
             json.dump(self.salients, salient_file, indent=2)
 
         return plate_salient
