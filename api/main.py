@@ -5,7 +5,6 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 
 from api import platos_rutas, ingredientes_rutas, usuarios_rutas
-from api import FoodData
 from api import tags_metadata
 
 # Objeto app de tipo FastApi
@@ -53,6 +52,11 @@ async def validation_exception_handler(request, exc: RequestValidationError):
             }
         )
     )
+
+# DEFAULT
+@app.get("/")
+def read_root():
+    return {"Hola": "Jokin"}
 
 # INGREDIENTES
 app.include_router(

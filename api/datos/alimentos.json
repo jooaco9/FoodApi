@@ -6818,6 +6818,15 @@
       "fibra": 20.0,
       "grasas": 0.2,
       "id": 758
+    },
+    {
+      "nombre": "Prueba",
+      "calorias": 3,
+      "carbohidratos": 0.0,
+      "proteinas": 0.0,
+      "fibra": 0.0,
+      "grasas": 0.0,
+      "id": 759
     }
   ]
 }
