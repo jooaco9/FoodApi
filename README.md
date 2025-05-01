@@ -73,10 +73,6 @@ Una vez que el servidor esté en funcionamiento, puedes acceder a la documentaci
 
 Este proyecto está en desarrollo activo. Se están implementando nuevas funcionalidades y mejorando las existentes. No se considera una versión final y pueden producirse cambios significativos.
 
-## Licencia
-
-Este proyecto está licenciado bajo la Licencia Apache 2.0 - consulta el archivo LICENSE para más detalles.
-
 ## Contacto
 
 - Joaquín Corbo - [@9_jokin](https://x.com/9_jokin)
